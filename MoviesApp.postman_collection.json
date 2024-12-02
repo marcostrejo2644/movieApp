@@ -1,0 +1,473 @@
+{
+	"info": {
+		"_postman_id": "fa2080b0-4d11-468d-93d3-cc4fe49b341a",
+		"name": "Movies App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12527470"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"testAdmin\",\r\n    \"email\": \"testAdmin@xample.com\",\r\n    \"password\": \"Securepass2@word\",\r\n    \"firstName\": \"Test\",\r\n    \"lastName\": \"User\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token USER}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"New name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token USER}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Or Activate User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token USER}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"New name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"if (response.accessToken && response.user) {\r",
+									"  const userRole = response.user.role;\r",
+									"\r",
+									"  if (userRole === 'ADMIN') {\r",
+									"    pm.collectionVariables.set('Token ADMIN', response.accessToken);\r",
+									"  } else if (userRole === 'USER') {\r",
+									"    pm.collectionVariables.set('Token USER', response.accessToken);\r",
+									"  }\r",
+									"} else {\r",
+									"  pm.test('Error: No se encontró el token o el usuario en la respuesta', () => {\r",
+									"    pm.expect(false).to.be.true;\r",
+									"  });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"testuser2\",\r\n    \"password\": \"Securepass2@word\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/auth/login",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movies",
+			"item": [
+				{
+					"name": "Get All movies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/movies",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Movie By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token USER}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/movies/:movieId",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"movies",
+								":movieId"
+							],
+							"variable": [
+								{
+									"key": "movieId",
+									"value": "674daef391699a33a9baf246"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Movie",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Inception\",\r\n  \"description\": \"A skilled thief is given a chance to have his criminal history erased if he can successfully perform an inception — planting an idea into a target's subconscious.\",\r\n  \"genre\": \"Sci-Fi\",\r\n  \"releaseDate\": \"2010-07-16\",\r\n  \"director\": \"Christopher Nolan\",\r\n  \"cast\": [\r\n    \"Leonardo DiCaprio\",\r\n    \"Joseph Gordon-Levitt\",\r\n    \"Ellen Page\",\r\n    \"Tom Hardy\"\r\n  ],\r\n  \"rating\": 8.8,\r\n  \"duration\": 148,\r\n  \"language\": \"English\",\r\n  \"country\": \"USA\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/movies",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync star wars",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Inception\",\r\n  \"description\": \"A skilled thief is given a chance to have his criminal history erased if he can successfully perform an inception — planting an idea into a target's subconscious.\",\r\n  \"genre\": \"Sci-Fi\",\r\n  \"releaseDate\": \"2010-07-16\",\r\n  \"director\": \"Christopher Nolan\",\r\n  \"cast\": [\r\n    \"Leonardo DiCaprio\",\r\n    \"Joseph Gordon-Levitt\",\r\n    \"Ellen Page\",\r\n    \"Tom Hardy\"\r\n  ],\r\n  \"rating\": 8.8,\r\n  \"duration\": 148,\r\n  \"language\": \"English\",\r\n  \"country\": \"USA\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/movies/sync-star-wars",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"movies",
+								"sync-star-wars"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit movie",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Inception2\"\r\n\r\n \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/movies/:movieId",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"movies",
+								":movieId"
+							],
+							"variable": [
+								{
+									"key": "movieId",
+									"value": "674daef391699a33a9baf246"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit movie Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/movies/:movieId",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"movies",
+								":movieId"
+							],
+							"variable": [
+								{
+									"key": "movieId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseUrl",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "Token ADMIN",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6IjY3NGRhNTcwZjZlNWM2YjJkOGE5NWVkMSIsImlhdCI6MTczMzE0Nzk3NCwiZXhwIjoxNzMzMTUxNTc0fQ.ypGhcLNP1OAgFWrSYpqsuV5CLBhLWUwEhZYzdw6ov0s"
+		},
+		{
+			"key": "Token USER",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6IjY3NGRhNTcwZjZlNWM2YjJkOGE5NWVkMSIsImlhdCI6MTczMzE0OTUzNCwiZXhwIjoxNzMzMTUzMTM0fQ.7_GtUSnEraPD4mWgYVDRbDRxa4CF4Q8ECQxw9ldMH0I"
+		}
+	]
+}
